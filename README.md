@@ -1,63 +1,55 @@
-# Astro Starter Kit: Blog
+# Cole Stephens | Lab Journal
 
-```sh
-npm create astro@latest -- --template blog
-```
+A public technical journal documenting hands-on work with homelab infrastructure, networking, Linux, virtualization, monitoring, automation, and self-hosted services.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## About
 
-Features:
+This site serves as an ongoing record of the projects I build, the problems I encounter, how I troubleshoot them, and what I learn in the process.
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+The journal is intended to complement my broader GitHub homelab documentation by focusing less on static architecture and more on the process of designing, deploying, breaking, troubleshooting, and improving infrastructure.
 
-## 🚀 Project Structure
+## Content
 
-Inside of your Astro project, you'll see the following folders and files:
+The site contains two primary types of technical writing:
 
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
+### Lab Notes
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Shorter entries documenting active work, troubleshooting, experiments, and discoveries.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Project Write-ups
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+Longer case studies covering completed projects, including goals, architecture, implementation, challenges, troubleshooting, results, and lessons learned.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Topics
 
-## 🧞 Commands
+Current areas of focus include:
 
-All commands are run from the root of the project, from a terminal:
+- Linux administration
+- Proxmox VE and virtualization
+- Networking and VLAN segmentation
+- OPNsense and firewall configuration
+- Docker and self-hosting
+- TrueNAS and ZFS storage
+- Prometheus and Grafana
+- DNS and VPN infrastructure
+- Home Assistant and automation
+- Raspberry Pi projects
+- Infrastructure troubleshooting
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Technology
 
-## 👀 Want to learn more?
+The site is built with:
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Astro
+- TypeScript
+- Markdown / MDX
+- Git
+- GitHub
+- Cloudflare Pages
 
-## Credit
+## Development
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Install dependencies:
+
+```bash
+npm install

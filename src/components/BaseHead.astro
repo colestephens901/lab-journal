@@ -2,8 +2,9 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+
 import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
+import SocialImage from '../assets/cole-homelab-social-card.png';
 import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
 
@@ -15,21 +16,31 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const {
+	title,
+	description,
+	image = SocialImage,
+} = Astro.props;
+
+const socialImageURL = new URL(image.src, Astro.site);
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
+
 <link rel="sitemap" href="/sitemap-index.xml" />
+
 <link
 	rel="alternate"
 	type="application/rss+xml"
 	title={SITE_TITLE}
 	href={new URL('rss.xml', Astro.site)}
 />
+
 <meta name="generator" content={Astro.generator} />
 
 <Font cssVariable="--font-atkinson" preload />
@@ -39,14 +50,27 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
+<meta name="title" content={title} />
 <meta name="description" content={description} />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph / Facebook / LinkedIn -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta property="og:image" content={socialImageURL} />
+<meta
+	property="og:image:alt"
+	content="Cole's Homelab technical lab journal"
+/>
+<meta property="og:site_name" content="Cole's Homelab" />
 
-<!-- Twitter -->
+<!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImageURL} />
+<meta
+	name="twitter:image:alt"
+	content="Cole's Homelab technical lab journal"
+/>

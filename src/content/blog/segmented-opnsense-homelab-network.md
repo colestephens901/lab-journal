@@ -12,6 +12,9 @@ tags:
   - "DHCP"
 featured: true
 draft: false
+heroImage: "../../assets/blog/opnsense-segmented-network.png"
+heroImageAlt: "OPNsense dashboard showing system health, segmented network interfaces, an active gateway, firewall policy distribution, infrastructure services, and network traffic."
+heroImageCaption: "The OPNsense firewall provides routing, segmentation, and policy enforcement across the homelab while also supporting DHCP, monitoring, and other core network services."
 ---
 
 ## Overview
@@ -72,21 +75,11 @@ Wireless clients, smart-home equipment, and devices that do not need unrestricte
 
 This provides a useful security boundary between ordinary endpoint devices and the systems responsible for running the homelab.
 
-The simplified architecture looks like:
+The high-level architecture looks like this:
 
-```text
-                     Internet
-                        |
-                        v
-                    OPNsense
-                        |
-          +-------------+-------------+
-          |             |             |
-          v             v             v
-     Management       Trusted      Untrusted
-          |             |             |
-   Infrastructure     Servers      Clients / IoT
-```
+![Homelab network architecture showing OPNsense routing and firewalling between Management, Trusted, and Untrusted VLANs with secure remote VPN access.](../../assets/blog/homelab-network-architecture.png)
+
+*High-level homelab network architecture showing OPNsense routing and firewalling between Management, Trusted, and Untrusted network segments while providing secure remote access through VPN services.*
 
 OPNsense routes between these networks, but routing alone does not imply permission to communicate.
 
@@ -127,27 +120,9 @@ Understanding tagged and untagged traffic was an important part of the project b
 
 Troubleshooting therefore often involves checking several layers:
 
-```text
-Physical link
-     |
-     v
-Switch port configuration
-     |
-     v
-VLAN tagging
-     |
-     v
-OPNsense interface
-     |
-     v
-DHCP
-     |
-     v
-Firewall policy
-     |
-     v
-DNS / Application
-```
+![Layer-by-layer VLAN troubleshooting workflow from the physical link through switch configuration, VLAN tagging, OPNsense, DHCP, firewall policy, and DNS or application connectivity.](../../assets/blog/managed-switching-vlan-troubleshooting.png)
+
+*The troubleshooting path I use when diagnosing VLAN connectivity issues, working from the physical layer upward before moving on to routing, policy, DNS, or the application itself.*
 
 ## DHCP
 
@@ -172,18 +147,11 @@ The DNS environment combines local recursive resolution with filtering and inter
 
 Internal service names can resolve directly to private infrastructure while ordinary Internet domains continue through the normal DNS path.
 
-A simplified DNS request looks like:
+A high-level DNS request looks like:
 
-```text
-Client
-  |
-  v
-Internal DNS Resolver
-  |
-  +---- Internal hostname ----> Local service
-  |
-  +---- Public hostname ------> Recursive DNS
-```
+![Homelab DNS architecture showing clients using three redundant Pi-hole and Unbound resolvers for internal hostname resolution and recursive public DNS lookups.](../../assets/blog/homelab-dns-architecture.png)
+
+*DNS requests use redundant Pi-hole resolvers backed by Unbound. Internal hostnames resolve directly to local services, while public queries are resolved recursively through the public DNS hierarchy.*
 
 This became especially useful for services accessed through an internal reverse proxy.
 

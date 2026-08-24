@@ -12,6 +12,9 @@ tags:
   - "Infrastructure"
 featured: false
 draft: false
+heroImage: "../../assets/blog/proxmox-multi-node-homelab.png"
+heroImageAlt: "Proxmox VE datacenter view showing three homelab nodes along with virtual machines, Linux containers, and shared storage resources."
+heroImageCaption: "The multi-node Proxmox VE environment showing three physical nodes, virtual machines, Linux containers, and shared storage integrated into the cluster."
 ---
 
 ## Overview

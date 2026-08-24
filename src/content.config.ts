@@ -20,6 +20,10 @@ const blog = defineCollection({
 
 			heroImage: z.optional(image()),
 
+			heroImageAlt: z.string().optional(),
+
+			heroImageCaption: z.string().optional(),
+
 			type: z
 				.enum(['lab-note', 'project-writeup'])
 				.default('lab-note'),

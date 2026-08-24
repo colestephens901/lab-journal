@@ -12,6 +12,9 @@ tags:
   - "Backups"
 featured: true
 draft: false
+heroImage: "../../assets/blog/truenas-zfs-storage-dashboard.png"
+heroImageAlt: "TrueNAS storage dashboard showing a healthy three-disk RAIDZ1 ZFS pool, storage utilization, scrub status, and disk health."
+heroImageCaption: "The TrueNAS storage dashboard showing the three-disk RAIDZ1 ZFS pool online with healthy ZFS status, capacity utilization, and completed scrub checks."
 ---
 
 ## Overview

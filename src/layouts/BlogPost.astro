@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -11,6 +13,9 @@ const {
 	description,
 	pubDate,
 	updatedDate,
+	heroImage,
+	heroImageAlt,
+	heroImageCaption,
 	type,
 	tags,
 } = Astro.props;
@@ -90,6 +95,30 @@ const typeLabel =
 					}
 				</header>
 
+				{
+					heroImage && (
+						<figure class="hero-figure">
+							<div class="hero-image-wrapper">
+								<Image
+									src={heroImage}
+									alt={heroImageAlt ?? title}
+									widths={[640, 960, 1280, 1600]}
+									sizes="(max-width: 900px) 100vw, 1100px"
+									loading="eager"
+								/>
+							</div>
+
+							{
+								heroImageCaption && (
+									<figcaption>
+										{heroImageCaption}
+									</figcaption>
+								)
+							}
+						</figure>
+					)
+				}
+
 				<div class="article-divider"></div>
 
 				<div class="prose">
@@ -104,7 +133,7 @@ const typeLabel =
 
 <style>
 	main {
-		max-width: 900px;
+		max-width: 1120px;
 	}
 
 	article {
@@ -117,6 +146,7 @@ const typeLabel =
 
 	.back {
 		display: inline-block;
+
 		margin-bottom: 3rem;
 
 		color: var(--muted);
@@ -186,6 +216,7 @@ const typeLabel =
 
 	.description {
 		max-width: 750px;
+
 		margin: 1.8rem 0 0;
 
 		color: var(--muted);
@@ -219,8 +250,53 @@ const typeLabel =
 		margin-top: 1.5rem;
 	}
 
+	.hero-figure {
+		margin: 4rem 0 0;
+	}
+
+	.hero-image-wrapper {
+		overflow: hidden;
+
+		border: 1px solid var(--border);
+		border-radius: 14px;
+
+		background: var(--bg-elevated);
+
+		box-shadow:
+			0 30px 80px rgba(0, 0, 0, 0.25),
+			0 0 0 1px rgba(255, 255, 255, 0.015);
+	}
+
+	.hero-image-wrapper :global(img) {
+		display: block;
+
+		width: 100%;
+		height: auto;
+
+		margin: 0;
+
+		border: 0;
+		border-radius: 0;
+
+		background: transparent;
+	}
+
+	.hero-figure figcaption {
+		max-width: 900px;
+
+		margin: 0.8rem auto 0;
+
+		color: #77889d;
+
+		font-family: Consolas, monospace;
+		font-size: 0.72rem;
+		line-height: 1.55;
+		text-align: center;
+	}
+
 	.article-divider {
 		height: 1px;
+
 		margin: 4rem 0;
 
 		background: var(--border);
@@ -228,6 +304,7 @@ const typeLabel =
 
 	.prose {
 		max-width: 760px;
+
 		margin: 0 auto;
 
 		color: #c4cfdd;
@@ -290,7 +367,147 @@ const typeLabel =
 	}
 
 	.prose :global(pre) {
+		overflow-x: auto;
+
 		margin: 2rem 0;
+	}
+
+	/*
+	 * Standard Markdown images
+	 *
+	 * Example:
+	 * ![Description](../../assets/blog/example.png)
+	 */
+	.prose :global(img) {
+		display: block;
+
+		max-width: 100%;
+		height: auto;
+
+		margin: 2.5rem auto;
+
+		border: 1px solid var(--border);
+		border-radius: 10px;
+
+		background: var(--bg-elevated);
+
+		box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+	}
+
+	/*
+	 * Figure blocks with captions
+	 */
+	.prose :global(figure) {
+		margin: 3rem 0;
+	}
+
+	.prose :global(figure img) {
+		width: 100%;
+
+		margin: 0;
+	}
+
+	.prose :global(figcaption) {
+		margin-top: 0.8rem;
+
+		color: #77889d;
+
+		font-family: Consolas, monospace;
+		font-size: 0.72rem;
+		line-height: 1.55;
+		text-align: center;
+	}
+
+	/*
+	 * Wide figures can extend outside the normal
+	 * article text column on larger displays.
+	 *
+	 * Use:
+	 *
+	 * <figure class="wide">
+	 * ...
+	 * </figure>
+	 */
+	.prose :global(figure.wide) {
+		width: min(1000px, calc(100vw - 3rem));
+		max-width: none;
+
+		margin-left: 50%;
+
+		transform: translateX(-50%);
+	}
+
+	/*
+	 * Screenshot-style figures get a subtle
+	 * technical-window treatment.
+	 */
+	.prose :global(figure.screenshot) {
+		padding: 0.65rem;
+
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		background: #080d14;
+
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+	}
+
+	.prose :global(figure.screenshot img) {
+		border-radius: 7px;
+
+		box-shadow: none;
+	}
+
+	.prose :global(figure.screenshot figcaption) {
+		padding: 0 0.5rem 0.15rem;
+	}
+
+	/*
+	 * Optional two-image gallery.
+	 */
+	.prose :global(.image-grid) {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+
+		width: min(1000px, calc(100vw - 3rem));
+
+		margin: 3rem 0 3rem 50%;
+
+		transform: translateX(-50%);
+	}
+
+	.prose :global(.image-grid figure) {
+		margin: 0;
+	}
+
+	.prose :global(.image-grid img) {
+		width: 100%;
+		height: 100%;
+		max-height: 500px;
+
+		margin: 0;
+
+		object-fit: cover;
+	}
+
+	@media (max-width: 800px) {
+		main {
+			max-width: 900px;
+		}
+
+		.prose :global(figure.wide),
+		.prose :global(.image-grid) {
+			width: 100%;
+
+			margin-left: 0;
+
+			transform: none;
+		}
+
+		.prose :global(.image-grid) {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	@media (max-width: 700px) {
@@ -300,6 +517,19 @@ const typeLabel =
 
 		.article-divider {
 			margin: 3rem 0;
+		}
+
+		.hero-figure {
+			margin-top: 3rem;
+		}
+
+		.hero-image-wrapper {
+			border-radius: 10px;
+		}
+
+		.prose :global(img) {
+			margin: 2rem auto;
+			border-radius: 8px;
 		}
 	}
 </style>

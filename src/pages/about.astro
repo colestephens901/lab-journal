@@ -39,54 +39,108 @@ import Footer from '../components/Footer.astro';
 						backups, remote access, automation, and the occasional configuration
 						that doesn't survive first contact with reality.
 					</p>
+
+					<div class="hero-links">
+						<a
+							class="profile-link primary-link"
+							href="/projects/"
+						>
+							View Projects
+							<span aria-hidden="true">→</span>
+						</a>
+
+						<a
+							class="profile-link secondary-link"
+							href="https://github.com/colestephens901"
+							target="_blank"
+							rel="noreferrer"
+						>
+							GitHub
+						</a>
+
+						<a
+							class="profile-link secondary-link"
+							href="https://www.linkedin.com/in/colestephens901"
+							target="_blank"
+							rel="noreferrer"
+						>
+							LinkedIn
+						</a>
+					</div>
 				</div>
 
-				<div class="profile-terminal">
-					<div class="terminal-top">
-						<span></span>
-						<span></span>
-						<span></span>
-
-						<p>cole@lab:~</p>
-					</div>
-
-					<div class="terminal-body">
-						<p>
-							<span class="prompt">$</span>
-							cat profile.txt
-						</p>
-
-						<div class="output">
-							<p>
-								<span>role:</span>
-								Field Technician
-							</p>
-
-							<p>
-								<span>education:</span>
-								Information Technology
-							</p>
-
-							<p>
-								<span>focus:</span>
-								Systems & Infrastructure
-							</p>
-
-							<p>
-								<span>learning:</span>
-								CompTIA A+ / Network+
-							</p>
-
-							<p>
-								<span>lab_status:</span>
-								<strong>online</strong>
-							</p>
+				<div class="profile-column">
+					<div class="portrait-card">
+						<div class="portrait-image">
+							<img
+								src="/images/profile/cole-stephens.png"
+								alt="Professional headshot of Cole Stephens"
+								width="1024"
+								height="1024"
+							/>
 						</div>
 
-						<p class="last-line">
-							<span class="prompt">$</span>
-							<span class="cursor">_</span>
-						</p>
+						<div class="portrait-caption">
+							<div>
+								<p class="portrait-name">Cole Stephens</p>
+								<p class="portrait-role">
+									IT / SYSTEMS / INFRASTRUCTURE
+								</p>
+							</div>
+
+							<span class="availability">
+								<span class="availability-dot"></span>
+								Learning
+							</span>
+						</div>
+					</div>
+
+					<div class="profile-terminal">
+						<div class="terminal-top">
+							<span></span>
+							<span></span>
+							<span></span>
+							<p>cole@lab:~</p>
+						</div>
+
+						<div class="terminal-body">
+							<p>
+								<span class="prompt">$</span>
+								cat profile.txt
+							</p>
+
+							<div class="output">
+								<p>
+									<span>role:</span>
+									Field Technician
+								</p>
+
+								<p>
+									<span>education:</span>
+									Information Technology
+								</p>
+
+								<p>
+									<span>focus:</span>
+									Systems & Infrastructure
+								</p>
+
+								<p>
+									<span>learning:</span>
+									CompTIA A+ / Network+
+								</p>
+
+								<p>
+									<span>lab_status:</span>
+									<strong>online</strong>
+								</p>
+							</div>
+
+							<p class="last-line">
+								<span class="prompt">$</span>
+								<span class="cursor">_</span>
+							</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -94,6 +148,7 @@ import Footer from '../components/Footer.astro';
 			<section class="story">
 				<div class="section-title">
 					<p class="section-label">BACKGROUND</p>
+
 					<h2>From troubleshooting devices to infrastructure.</h2>
 				</div>
 
@@ -227,8 +282,10 @@ import Footer from '../components/Footer.astro';
 				<div class="approach-list">
 					<div>
 						<span>01</span>
+
 						<section>
 							<h3>Understand the problem</h3>
+
 							<p>
 								Start with the actual symptoms and verify assumptions before
 								changing the configuration.
@@ -238,8 +295,10 @@ import Footer from '../components/Footer.astro';
 
 					<div>
 						<span>02</span>
+
 						<section>
 							<h3>Work from evidence</h3>
+
 							<p>
 								Use logs, metrics, command output, documentation, and controlled
 								testing to narrow down the cause.
@@ -249,8 +308,10 @@ import Footer from '../components/Footer.astro';
 
 					<div>
 						<span>03</span>
+
 						<section>
 							<h3>Understand the fix</h3>
+
 							<p>
 								Getting something working is useful. Understanding why it
 								worked is what makes the solution reusable.
@@ -260,8 +321,10 @@ import Footer from '../components/Footer.astro';
 
 					<div>
 						<span>04</span>
+
 						<section>
 							<h3>Leave documentation behind</h3>
+
 							<p>
 								Record the architecture, important decisions, problems
 								encountered, and lessons learned for the next time.
@@ -301,7 +364,7 @@ import Footer from '../components/Footer.astro';
 <style>
 	.about-hero {
 		display: grid;
-		grid-template-columns: 1.35fr 0.8fr;
+		grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.72fr);
 		gap: 5rem;
 		align-items: center;
 
@@ -346,7 +409,178 @@ import Footer from '../components/Footer.astro';
 
 	.intro.secondary {
 		margin-top: 1.2rem;
+
 		font-size: 1rem;
+	}
+
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+
+		margin-top: 2.2rem;
+	}
+
+	.profile-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.6rem;
+
+		min-height: 44px;
+		padding: 0.65rem 1rem;
+
+		border-radius: 8px;
+
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-decoration: none;
+
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease,
+			background 0.2s ease;
+	}
+
+	.profile-link:hover {
+		transform: translateY(-2px);
+	}
+
+	.primary-link {
+		border: 1px solid var(--accent);
+
+		background: var(--accent);
+		color: #061018;
+	}
+
+	.primary-link:hover {
+		background: var(--accent-hover);
+		color: #061018;
+	}
+
+	.secondary-link {
+		border: 1px solid var(--border);
+
+		background: var(--bg-elevated);
+		color: var(--text);
+	}
+
+	.secondary-link:hover {
+		border-color: #34455b;
+
+		color: var(--text-strong);
+	}
+
+	.profile-column {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.portrait-card {
+		overflow: hidden;
+
+		border: 1px solid var(--border);
+		border-radius: 14px;
+
+		background: var(--bg-elevated);
+
+		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+	}
+
+	.portrait-image {
+		position: relative;
+
+		overflow: hidden;
+
+		aspect-ratio: 1 / 1;
+	}
+
+	.portrait-image::after {
+		position: absolute;
+		inset: 0;
+
+		background:
+			linear-gradient(
+				to bottom,
+				transparent 65%,
+				rgba(6, 10, 15, 0.12)
+			);
+
+		content: "";
+		pointer-events: none;
+	}
+
+	.portrait-image img {
+		display: block;
+
+		width: 100%;
+		height: 100%;
+
+		object-fit: cover;
+		object-position: center center;
+	}
+
+	.portrait-caption {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+
+		padding: 1rem 1.1rem;
+
+		border-top: 1px solid var(--border);
+
+		background: #0d131c;
+	}
+
+	.portrait-name {
+		margin: 0 0 0.2rem;
+
+		color: var(--text-strong);
+
+		font-size: 0.9rem;
+		font-weight: 700;
+	}
+
+	.portrait-role {
+		margin: 0;
+
+		color: #6f8196;
+
+		font-family: Consolas, monospace;
+		font-size: 0.62rem;
+		letter-spacing: 0.07em;
+	}
+
+	.availability {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+
+		flex-shrink: 0;
+
+		padding: 0.28rem 0.5rem;
+
+		border: 1px solid rgba(94, 234, 212, 0.22);
+		border-radius: 999px;
+
+		color: var(--success);
+
+		font-family: Consolas, monospace;
+		font-size: 0.62rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.availability-dot {
+		width: 6px;
+		height: 6px;
+
+		border-radius: 50%;
+
+		background: var(--success);
+		box-shadow: 0 0 8px rgba(94, 234, 212, 0.55);
 	}
 
 	.profile-terminal {
@@ -357,7 +591,7 @@ import Footer from '../components/Footer.astro';
 
 		background: #060a0f;
 
-		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 	}
 
 	.terminal-top {
@@ -391,15 +625,14 @@ import Footer from '../components/Footer.astro';
 	}
 
 	.terminal-body {
-		min-height: 340px;
-		padding: 1.5rem;
+		padding: 1.4rem;
 
 		font-family: Consolas, "Courier New", monospace;
-		font-size: 0.82rem;
+		font-size: 0.78rem;
 	}
 
 	.terminal-body > p {
-		margin: 0 0 1.4rem;
+		margin: 0 0 1.25rem;
 	}
 
 	.prompt {
@@ -407,15 +640,15 @@ import Footer from '../components/Footer.astro';
 	}
 
 	.output {
-		padding-left: 1.2rem;
+		padding-left: 1rem;
 	}
 
 	.output p {
 		display: grid;
-		grid-template-columns: 110px 1fr;
-		gap: 0.8rem;
+		grid-template-columns: 100px 1fr;
+		gap: 0.7rem;
 
-		margin: 0 0 0.75rem;
+		margin: 0 0 0.65rem;
 
 		color: #b7c4d3;
 	}
@@ -426,11 +659,13 @@ import Footer from '../components/Footer.astro';
 
 	.output strong {
 		color: var(--success);
+
 		font-weight: 400;
 	}
 
 	.last-line {
-		margin-top: 1.7rem !important;
+		margin-top: 1.4rem !important;
+		margin-bottom: 0 !important;
 	}
 
 	.cursor {
@@ -478,6 +713,7 @@ import Footer from '../components/Footer.astro';
 
 	.focus-section {
 		padding: 6rem 0;
+
 		border-top: 1px solid var(--border);
 	}
 
@@ -671,7 +907,19 @@ import Footer from '../components/Footer.astro';
 
 	.secondary-button:hover {
 		border-color: #34455b;
+
 		color: var(--text-strong);
+	}
+
+	@media (max-width: 1000px) {
+		.about-hero {
+			grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+			gap: 3rem;
+		}
+
+		h1 {
+			font-size: clamp(3.2rem, 7vw, 5rem);
+		}
 	}
 
 	@media (max-width: 850px) {
@@ -686,8 +934,8 @@ import Footer from '../components/Footer.astro';
 			padding: 5rem 0;
 		}
 
-		.profile-terminal {
-			max-width: 600px;
+		.profile-column {
+			max-width: 580px;
 		}
 
 		.section-heading {
@@ -707,6 +955,22 @@ import Footer from '../components/Footer.astro';
 		.output p {
 			grid-template-columns: 1fr;
 			gap: 0.1rem;
+		}
+
+		.portrait-caption {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+
+	@media (max-width: 450px) {
+		.hero-links {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.profile-link {
+			width: 100%;
 		}
 	}
 </style>

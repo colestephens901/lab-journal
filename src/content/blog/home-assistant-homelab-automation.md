@@ -12,6 +12,9 @@ tags:
   - "Infrastructure"
 featured: false
 draft: false
+heroImage: "../../assets/blog/home-assistant-homelab-dashboard.png"
+heroImageAlt: "Home Assistant homelab infrastructure dashboard showing Proxmox host status, CPU and memory utilization, server rack temperature and humidity, TrueNAS storage health, and backup status."
+heroImageCaption: "A dedicated Home Assistant infrastructure view combines Proxmox health, rack environmental monitoring, TrueNAS storage status, and backup visibility in one operational dashboard."
 ---
 
 ## Overview

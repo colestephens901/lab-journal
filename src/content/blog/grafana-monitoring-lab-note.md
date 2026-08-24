@@ -1,15 +1,18 @@
 ---
 title: "Building Out My Homelab Monitoring Stack"
 description: "Notes from deploying Prometheus and Grafana and beginning to centralize monitoring across my Proxmox environment."
-pubDate: 2026-08-20
-type: lab-note
+pubDate: "2026-08-19"
+type: "lab-note"
 tags:
-  - Grafana
-  - Prometheus
-  - Proxmox
-  - Monitoring
+  - "Grafana"
+  - "Prometheus"
+  - "Proxmox"
+  - "Monitoring"
 featured: false
 draft: false
+heroImage: "../../assets/blog/grafana-proxmox-hosts-dashboard.png"
+heroImageAlt: "Grafana dashboard showing homelab Proxmox host monitoring metrics including host status, CPU usage, memory usage, uptime, root filesystem usage, and load."
+heroImageCaption: "Grafana dashboard monitoring the main Proxmox hosts in the homelab."
 ---
 
 ## The Goal

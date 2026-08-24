@@ -10,6 +10,9 @@ tags:
   - Homelab
 featured: true
 draft: false
+heroImage: "../../assets/blog/rack-dashboard.png"
+heroImageAlt: "Custom Raspberry Pi homelab rack dashboard showing Proxmox hosts, network status, environmental conditions, storage, services, and display-node health."
+heroImageCaption: "The custom rack dashboard provides an at-a-glance view of compute, networking, storage, services, environmental conditions, and the Raspberry Pi display node."
 ---
 
 ## Overview

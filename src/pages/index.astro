@@ -1,8 +1,30 @@
 ---
+import { getCollection } from 'astro:content';
+
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const latestEntries = (await getCollection('blog'))
+	.filter((entry) => !entry.data.draft)
+	.sort(
+		(a, b) =>
+			b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	)
+	.slice(0, 4);
+
+const formatDate = (date: Date) =>
+	date.toLocaleDateString('en-US', {
+		month: 'short',
+		day: 'numeric',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
+
+const formatType = (type: string) =>
+	type === 'lab-note' ? 'Lab Note' : 'Project Write-up';
 ---
 
 <!doctype html>
@@ -64,11 +86,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<div class="grid">
 					<article>
 						<div class="card-number">01</div>
+
 						<h3>Virtualization</h3>
+
 						<p>
 							Proxmox VE, virtual machines, Linux containers, storage,
 							backups, clustering, and infrastructure management.
 						</p>
+
 						<div class="tags">
 							<span>Proxmox</span>
 							<span>Linux</span>
@@ -78,11 +103,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<article>
 						<div class="card-number">02</div>
+
 						<h3>Networking</h3>
+
 						<p>
 							OPNsense, VLANs, routing, DNS, VPNs, firewall policies,
 							wireless networking, and troubleshooting.
 						</p>
+
 						<div class="tags">
 							<span>OPNsense</span>
 							<span>VLANs</span>
@@ -92,11 +120,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<article>
 						<div class="card-number">03</div>
+
 						<h3>Self-Hosting</h3>
+
 						<p>
 							Docker, reverse proxies, monitoring, media services,
 							password management, and internal applications.
 						</p>
+
 						<div class="tags">
 							<span>Docker</span>
 							<span>Nginx</span>
@@ -106,11 +137,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<article>
 						<div class="card-number">04</div>
+
 						<h3>Automation & Monitoring</h3>
+
 						<p>
 							Home Assistant, Prometheus, Grafana, alerting, scripting,
 							and automating repetitive infrastructure tasks.
 						</p>
+
 						<div class="tags">
 							<span>Grafana</span>
 							<span>Prometheus</span>
@@ -120,9 +154,80 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</div>
 			</section>
 
+			<section class="latest-activity">
+				<div class="section-heading activity-heading">
+					<div>
+						<p class="section-label">LATEST LAB ACTIVITY</p>
+						<h2>Recent work from the lab.</h2>
+					</div>
+
+					<div class="activity-heading-right">
+						<p>
+							Projects, troubleshooting notes, infrastructure changes,
+							and lessons learned while operating the environment.
+						</p>
+
+						<a href="/blog/" class="view-all">
+							View all entries
+							<span aria-hidden="true">→</span>
+						</a>
+					</div>
+				</div>
+
+				<div class="activity-grid">
+					{
+						latestEntries.map((entry) => (
+							<a
+								class="activity-card"
+								href={`/blog/${entry.id}/`}
+							>
+								<div class="activity-top">
+									<span
+										class:list={[
+											'entry-type',
+											entry.data.type === 'lab-note'
+												? 'lab-note'
+												: 'project-writeup',
+										]}
+									>
+										{formatType(entry.data.type)}
+									</span>
+
+									<time datetime={entry.data.pubDate.toISOString()}>
+										{formatDate(entry.data.pubDate)}
+									</time>
+								</div>
+
+								<h3>{entry.data.title}</h3>
+
+								<p class="activity-description">
+									{entry.data.description}
+								</p>
+
+								{
+									entry.data.tags.length > 0 && (
+										<div class="activity-tags">
+											{entry.data.tags.slice(0, 3).map((tag) => (
+												<span>{tag}</span>
+											))}
+										</div>
+									)
+								}
+
+								<div class="activity-footer">
+									<span>Read entry</span>
+									<span aria-hidden="true">→</span>
+								</div>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
 			<section class="journal-preview">
 				<div>
 					<p class="section-label">LAB JOURNAL</p>
+
 					<h2>Documenting the process, not just the result.</h2>
 
 					<p>
@@ -140,10 +245,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					</div>
 
 					<div class="terminal-body">
-						<p><span class="prompt">$</span> whoami</p>
+						<p>
+							<span class="prompt">$</span> whoami
+						</p>
+
 						<p class="output">cole</p>
 
-						<p><span class="prompt">$</span> cat current-focus.txt</p>
+						<p>
+							<span class="prompt">$</span> cat current-focus.txt
+						</p>
+
 						<p class="output">
 							virtualization<br />
 							networking<br />
@@ -175,12 +286,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		display: inline-flex;
 		align-items: center;
 		gap: 0.55rem;
+
 		margin-bottom: 2.5rem;
 		padding: 0.4rem 0.7rem;
+
 		border: 1px solid var(--border);
 		border-radius: 999px;
+
 		background: rgba(16, 23, 34, 0.8);
 		color: var(--muted);
+
 		font-family: Consolas, monospace;
 		font-size: 0.75rem;
 		text-transform: uppercase;
@@ -190,7 +305,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.status-dot {
 		width: 7px;
 		height: 7px;
+
 		border-radius: 50%;
+
 		background: var(--success);
 		box-shadow: 0 0 10px rgba(94, 234, 212, 0.65);
 	}
@@ -198,7 +315,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.eyebrow,
 	.section-label {
 		margin: 0 0 1rem;
+
 		color: var(--accent);
+
 		font-family: Consolas, monospace;
 		font-size: 0.78rem;
 		font-weight: 700;
@@ -208,6 +327,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	h1 {
 		max-width: 900px;
 		margin: 0;
+
 		font-size: clamp(3.5rem, 8vw, 6.7rem);
 		line-height: 0.96;
 		letter-spacing: -0.055em;
@@ -220,7 +340,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.intro {
 		max-width: 760px;
 		margin: 2rem 0 0;
+
 		color: var(--muted);
+
 		font-size: clamp(1.05rem, 2vw, 1.25rem);
 		line-height: 1.75;
 	}
@@ -229,6 +351,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.8rem;
+
 		margin-top: 2.5rem;
 	}
 
@@ -237,12 +360,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		align-items: center;
 		justify-content: center;
 		gap: 0.7rem;
+
 		min-height: 46px;
 		padding: 0.7rem 1.1rem;
+
 		border-radius: 8px;
+
 		font-size: 0.9rem;
 		font-weight: 700;
 		text-decoration: none;
+
 		transition:
 			transform 0.2s ease,
 			border-color 0.2s ease,
@@ -284,12 +411,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		align-items: end;
 		justify-content: space-between;
 		gap: 4rem;
+
 		margin-bottom: 2rem;
 	}
 
 	.section-heading h2,
-	.journal-preview h2 {
+	.journal-preview h2,
+	.latest-activity h2 {
 		margin: 0;
+
 		font-size: clamp(2rem, 4vw, 3rem);
 		letter-spacing: -0.035em;
 	}
@@ -297,6 +427,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.section-heading > p {
 		max-width: 440px;
 		margin: 0;
+
 		color: var(--muted);
 	}
 
@@ -308,10 +439,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 	.grid article {
 		position: relative;
+
 		min-height: 270px;
 		padding: 1.8rem;
+
 		border: 1px solid var(--border);
 		border-radius: 12px;
+
 		background:
 			linear-gradient(
 				145deg,
@@ -319,6 +453,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				transparent
 			),
 			var(--bg-elevated);
+
 		transition:
 			transform 0.2s ease,
 			border-color 0.2s ease;
@@ -331,19 +466,23 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 	.card-number {
 		margin-bottom: 3rem;
+
 		color: var(--accent);
+
 		font-family: Consolas, monospace;
 		font-size: 0.75rem;
 	}
 
 	.grid h3 {
 		margin: 0 0 0.7rem;
+
 		font-size: 1.45rem;
 	}
 
 	.grid p {
 		max-width: 470px;
 		margin: 0;
+
 		color: var(--muted);
 	}
 
@@ -351,17 +490,206 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
+
 		margin-top: 1.4rem;
 	}
 
 	.tags span {
 		padding: 0.3rem 0.55rem;
+
 		border: 1px solid var(--border);
 		border-radius: 5px;
+
 		background: var(--bg-soft);
 		color: #aebdd0;
+
 		font-family: Consolas, monospace;
 		font-size: 0.72rem;
+	}
+
+	.latest-activity {
+		padding: 6rem 0;
+
+		border-top: 1px solid var(--border);
+	}
+
+	.activity-heading {
+		align-items: flex-end;
+	}
+
+	.activity-heading-right {
+		max-width: 460px;
+	}
+
+	.activity-heading-right p {
+		margin: 0;
+
+		color: var(--muted);
+	}
+
+	.view-all {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+
+		margin-top: 1rem;
+
+		color: var(--accent);
+
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.view-all:hover {
+		color: var(--accent-hover);
+	}
+
+	.activity-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.activity-card {
+		display: flex;
+		flex-direction: column;
+
+		min-height: 310px;
+		padding: 1.6rem;
+
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		background:
+			linear-gradient(
+				145deg,
+				rgba(255, 255, 255, 0.025),
+				transparent
+			),
+			var(--bg-elevated);
+
+		color: inherit;
+		text-decoration: none;
+
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease,
+			background 0.2s ease;
+	}
+
+	.activity-card:hover {
+		transform: translateY(-3px);
+		border-color: #34455b;
+
+		background:
+			linear-gradient(
+				145deg,
+				rgba(255, 255, 255, 0.04),
+				transparent
+			),
+			var(--bg-elevated);
+	}
+
+	.activity-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+
+		margin-bottom: 1.7rem;
+	}
+
+	.entry-type {
+		display: inline-flex;
+		align-items: center;
+
+		padding: 0.28rem 0.5rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		font-family: Consolas, monospace;
+		font-size: 0.67rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	.entry-type.lab-note {
+		border-color: rgba(56, 189, 248, 0.28);
+		background: rgba(56, 189, 248, 0.07);
+		color: var(--accent);
+	}
+
+	.entry-type.project-writeup {
+		border-color: rgba(94, 234, 212, 0.25);
+		background: rgba(94, 234, 212, 0.06);
+		color: var(--success);
+	}
+
+	.activity-top time {
+		color: #74869b;
+
+		font-family: Consolas, monospace;
+		font-size: 0.7rem;
+	}
+
+	.activity-card h3 {
+		margin: 0 0 0.8rem;
+
+		color: var(--text-strong);
+
+		font-size: 1.4rem;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+	}
+
+	.activity-description {
+		margin: 0;
+
+		color: var(--muted);
+
+		line-height: 1.65;
+	}
+
+	.activity-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+
+		margin-top: 1.3rem;
+	}
+
+	.activity-tags span {
+		padding: 0.25rem 0.45rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		background: var(--bg-soft);
+		color: #93a4b8;
+
+		font-family: Consolas, monospace;
+		font-size: 0.66rem;
+	}
+
+	.activity-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		margin-top: auto;
+		padding-top: 1.5rem;
+
+		color: var(--accent);
+
+		font-size: 0.8rem;
+		font-weight: 700;
+	}
+
+	.activity-card:hover .activity-footer {
+		color: var(--accent-hover);
 	}
 
 	.journal-preview {
@@ -369,42 +697,55 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		grid-template-columns: 1fr 1fr;
 		gap: 5rem;
 		align-items: center;
+
 		padding: 6rem 0;
+
 		border-top: 1px solid var(--border);
 	}
 
 	.journal-preview > div:first-child > p:last-child {
 		max-width: 520px;
+
 		color: var(--muted);
+
 		font-size: 1.05rem;
 	}
 
 	.terminal {
 		overflow: hidden;
+
 		border: 1px solid var(--border);
 		border-radius: 12px;
+
 		background: #060a0f;
+
 		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
 	}
 
 	.terminal-top {
 		display: flex;
 		gap: 0.45rem;
+
 		padding: 0.85rem 1rem;
+
 		border-bottom: 1px solid var(--border);
+
 		background: #0d131c;
 	}
 
 	.terminal-top span {
 		width: 10px;
 		height: 10px;
+
 		border-radius: 50%;
+
 		background: #374151;
 	}
 
 	.terminal-body {
 		min-height: 300px;
 		padding: 1.4rem 1.6rem;
+
 		font-family: Consolas, "Courier New", monospace;
 		font-size: 0.9rem;
 	}
@@ -419,11 +760,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 	.output {
 		padding-left: 1.1rem;
+
 		color: #93a4b8;
 	}
 
 	.cursor {
 		color: var(--accent);
+
 		animation: blink 1s steps(1) infinite;
 	}
 
@@ -446,9 +789,23 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			margin-top: 1rem;
 		}
 
+		.activity-heading-right {
+			margin-top: 1rem;
+		}
+
 		.journal-preview {
 			grid-template-columns: 1fr;
 			gap: 2.5rem;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.activity-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.activity-card {
+			min-height: auto;
 		}
 	}
 
@@ -467,6 +824,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 		.card-number {
 			margin-bottom: 2rem;
+		}
+	}
+
+	@media (max-width: 450px) {
+		.activity-top {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 0.65rem;
 		}
 	}
 </style>

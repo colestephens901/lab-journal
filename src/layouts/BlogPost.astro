@@ -1,86 +1,305 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	type,
+	tags,
+} = Astro.props;
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-US', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+		timeZone: 'UTC',
+	}).format(date);
+
+const typeLabel =
+	type === 'project-writeup'
+		? 'Project Write-up'
+		: 'Lab Note';
 ---
 
+<!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
+		<BaseHead
+			title={`${title} | Cole Stephens`}
+			description={description}
+		/>
 	</head>
 
 	<body>
 		<Header />
+
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+				<header class="article-header">
+					<a class="back" href="/blog/">
+						← Back to Lab Journal
+					</a>
+
+					<div class="meta">
+						<span
+							class:list={[
+								'type-badge',
+								type === 'project-writeup'
+									? 'project'
+									: 'note',
+							]}
+						>
+							{typeLabel}
+						</span>
+
+						<time datetime={pubDate.toISOString()}>
+							{formatDate(pubDate)}
+						</time>
 					</div>
+
+					<h1>{title}</h1>
+
+					<p class="description">
+						{description}
+					</p>
+
+					{
+						tags.length > 0 && (
+							<div class="tags">
+								{tags.map((tag) => (
+									<span>{tag}</span>
+								))}
+							</div>
+						)
+					}
+
+					{
+						updatedDate && (
+							<p class="updated">
+								Last updated {formatDate(updatedDate)}
+							</p>
+						)
+					}
+				</header>
+
+				<div class="article-divider"></div>
+
+				<div class="prose">
 					<slot />
 				</div>
 			</article>
 		</main>
+
 		<Footer />
 	</body>
 </html>
+
+<style>
+	main {
+		max-width: 900px;
+	}
+
+	article {
+		padding: 6rem 0 2rem;
+	}
+
+	.article-header {
+		max-width: 850px;
+	}
+
+	.back {
+		display: inline-block;
+		margin-bottom: 3rem;
+
+		color: var(--muted);
+
+		font-family: Consolas, monospace;
+		font-size: 0.8rem;
+		text-decoration: none;
+	}
+
+	.back:hover {
+		color: var(--accent);
+	}
+
+	.meta {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+
+		margin-bottom: 1.5rem;
+	}
+
+	.type-badge {
+		display: inline-flex;
+
+		padding: 0.28rem 0.5rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		font-family: Consolas, monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.type-badge.note {
+		border-color: rgba(56, 189, 248, 0.3);
+
+		background: rgba(56, 189, 248, 0.09);
+		color: var(--accent);
+	}
+
+	.type-badge.project {
+		border-color: rgba(94, 234, 212, 0.3);
+
+		background: rgba(94, 234, 212, 0.08);
+		color: var(--success);
+	}
+
+	time,
+	.updated {
+		color: var(--muted);
+
+		font-family: Consolas, monospace;
+		font-size: 0.75rem;
+	}
+
+	h1 {
+		max-width: 850px;
+		margin: 0;
+
+		font-size: clamp(3rem, 7vw, 5.4rem);
+		line-height: 1;
+		letter-spacing: -0.05em;
+	}
+
+	.description {
+		max-width: 750px;
+		margin: 1.8rem 0 0;
+
+		color: var(--muted);
+
+		font-size: 1.15rem;
+		line-height: 1.7;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+
+		margin-top: 1.5rem;
+	}
+
+	.tags span {
+		padding: 0.3rem 0.55rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		background: var(--bg-soft);
+		color: #aebdd0;
+
+		font-family: Consolas, monospace;
+		font-size: 0.72rem;
+	}
+
+	.updated {
+		margin-top: 1.5rem;
+	}
+
+	.article-divider {
+		height: 1px;
+		margin: 4rem 0;
+
+		background: var(--border);
+	}
+
+	.prose {
+		max-width: 760px;
+		margin: 0 auto;
+
+		color: #c4cfdd;
+
+		font-size: 1.02rem;
+		line-height: 1.85;
+	}
+
+	.prose :global(h2) {
+		margin: 3.5rem 0 1rem;
+
+		font-size: 2rem;
+		letter-spacing: -0.025em;
+	}
+
+	.prose :global(h3) {
+		margin: 2.5rem 0 0.8rem;
+
+		font-size: 1.4rem;
+	}
+
+	.prose :global(p) {
+		margin: 0 0 1.4rem;
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 1.5rem;
+		padding-left: 1.5rem;
+	}
+
+	.prose :global(li) {
+		margin-bottom: 0.4rem;
+	}
+
+	.prose :global(blockquote) {
+		margin: 2rem 0;
+		padding: 1rem 1.3rem;
+
+		border-left: 3px solid var(--accent);
+
+		background: var(--accent-soft);
+		color: var(--text);
+	}
+
+	.prose :global(blockquote p) {
+		margin: 0;
+	}
+
+	.prose :global(a) {
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+	}
+
+	.prose :global(hr) {
+		margin: 3rem 0;
+
+		border: 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.prose :global(pre) {
+		margin: 2rem 0;
+	}
+
+	@media (max-width: 700px) {
+		article {
+			padding-top: 4rem;
+		}
+
+		.article-divider {
+			margin: 3rem 0;
+		}
+	}
+</style>

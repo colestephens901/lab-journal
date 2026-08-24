@@ -1,114 +1,511 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import Footer from '../../components/Footer.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+const posts = (await getCollection('blog'))
+	.filter((post) => !post.data.draft)
+	.sort(
+		(a, b) =>
+			b.data.pubDate.valueOf() -
+			a.data.pubDate.valueOf()
+	);
+
+const featuredPosts = posts.filter(
+	(post) => post.data.featured
 );
+
+const regularPosts = posts.filter(
+	(post) => !post.data.featured
+);
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-US', {
+		month: 'short',
+		day: 'numeric',
+		year: 'numeric',
+		timeZone: 'UTC',
+	}).format(date);
+
+const typeLabel = (type: string) =>
+	type === 'project-writeup'
+		? 'Project Write-up'
+		: 'Lab Note';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead
+			title="Lab Journal | Cole Stephens"
+			description="Projects, troubleshooting notes, and lessons learned from my homelab and infrastructure work."
+		/>
 	</head>
+
 	<body>
 		<Header />
+
 		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+			<section class="journal-header">
+				<p class="eyebrow">LAB JOURNAL</p>
+
+				<h1>Projects, problems,<br />and lessons learned.</h1>
+
+				<p class="intro">
+					A running record of what I'm building, troubleshooting,
+					researching, and learning across my homelab and infrastructure
+					projects.
+				</p>
+
+				<div class="legend">
+					<div>
+						<span class="legend-badge note">Lab Note</span>
+						<p>
+							Short entries documenting active work,
+							troubleshooting, and discoveries.
+						</p>
+					</div>
+
+					<div>
+						<span class="legend-badge project">
+							Project Write-up
+						</span>
+						<p>
+							Longer case studies covering completed
+							projects from planning through results.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			{
+				featuredPosts.length > 0 && (
+					<section class="featured-section">
+						<div class="section-heading">
+							<div>
+								<p class="section-label">FEATURED</p>
+								<h2>Project Write-ups</h2>
+							</div>
+						</div>
+
+						<div class="featured-grid">
+							{featuredPosts.map((post) => (
+								<a
+									class="featured-card"
+									href={`/blog/${post.id}/`}
+								>
+									<div class="post-top">
+										<span
+											class:list={[
+												'type-badge',
+												post.data.type === 'project-writeup'
+													? 'project'
+													: 'note',
+											]}
+										>
+											{typeLabel(post.data.type)}
+										</span>
+
+										<time datetime={post.data.pubDate.toISOString()}>
+											{formatDate(post.data.pubDate)}
+										</time>
+									</div>
+
+									<div>
+										<h3>{post.data.title}</h3>
+
+										<p class="description">
+											{post.data.description}
+										</p>
+									</div>
+
+									<div class="tags">
+										{post.data.tags.map((tag) => (
+											<span>{tag}</span>
+										))}
+									</div>
+
+									<div class="read-link">
+										Read project
+										<span aria-hidden="true">→</span>
+									</div>
 								</a>
-							</li>
+							))}
+						</div>
+					</section>
+				)
+			}
+
+			<section class="entries">
+				<div class="section-heading">
+					<div>
+						<p class="section-label">LATEST ENTRIES</p>
+						<h2>From the Lab</h2>
+					</div>
+
+					<p>
+						{posts.length} {
+							posts.length === 1
+								? 'published entry'
+								: 'published entries'
+						}
+					</p>
+				</div>
+
+				<div class="post-list">
+					{
+						regularPosts.map((post) => (
+							<a
+								class="post-row"
+								href={`/blog/${post.id}/`}
+							>
+								<div class="post-meta">
+									<span
+										class:list={[
+											'type-badge',
+											post.data.type === 'project-writeup'
+												? 'project'
+												: 'note',
+										]}
+									>
+										{typeLabel(post.data.type)}
+									</span>
+
+									<time datetime={post.data.pubDate.toISOString()}>
+										{formatDate(post.data.pubDate)}
+									</time>
+								</div>
+
+								<div class="post-content">
+									<h3>{post.data.title}</h3>
+									<p>{post.data.description}</p>
+
+									<div class="tags">
+										{post.data.tags.map((tag) => (
+											<span>{tag}</span>
+										))}
+									</div>
+								</div>
+
+								<div class="arrow" aria-hidden="true">
+									→
+								</div>
+							</a>
 						))
 					}
-				</ul>
+				</div>
 			</section>
 		</main>
+
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.journal-header {
+		max-width: 900px;
+		padding: 7rem 0 6rem;
+	}
+
+	.eyebrow,
+	.section-label {
+		margin: 0 0 1rem;
+
+		color: var(--accent);
+
+		font-family: Consolas, monospace;
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+	}
+
+	h1 {
+		margin: 0;
+
+		color: var(--text-strong);
+
+		font-size: clamp(3.4rem, 7vw, 6rem);
+		line-height: 0.98;
+		letter-spacing: -0.055em;
+	}
+
+	.intro {
+		max-width: 720px;
+		margin: 2rem 0 0;
+
+		color: var(--muted);
+
+		font-size: 1.15rem;
+		line-height: 1.75;
+	}
+
+	.legend {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+
+		margin-top: 3rem;
+	}
+
+	.legend > div {
+		padding: 1rem 1.1rem;
+
+		border: 1px solid var(--border);
+		border-radius: 10px;
+
+		background: var(--bg-elevated);
+	}
+
+	.legend p {
+		margin: 0.75rem 0 0;
+
+		color: var(--muted);
+
+		font-size: 0.85rem;
+	}
+
+	.type-badge,
+	.legend-badge {
+		display: inline-flex;
+
+		padding: 0.28rem 0.5rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		font-family: Consolas, monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.type-badge.note,
+	.legend-badge.note {
+		border-color: rgba(56, 189, 248, 0.3);
+
+		background: rgba(56, 189, 248, 0.09);
+		color: var(--accent);
+	}
+
+	.type-badge.project,
+	.legend-badge.project {
+		border-color: rgba(94, 234, 212, 0.3);
+
+		background: rgba(94, 234, 212, 0.08);
+		color: var(--success);
+	}
+
+	.featured-section,
+	.entries {
+		padding: 1rem 0 6rem;
+	}
+
+	.section-heading {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 2rem;
+
+		margin-bottom: 2rem;
+	}
+
+	.section-heading h2 {
+		margin: 0;
+
+		font-size: clamp(2rem, 4vw, 3rem);
+		letter-spacing: -0.035em;
+	}
+
+	.section-heading > p {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.featured-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.featured-card {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		min-height: 360px;
+		padding: 1.8rem;
+
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		background:
+			linear-gradient(
+				145deg,
+				rgba(94, 234, 212, 0.04),
+				transparent 55%
+			),
+			var(--bg-elevated);
+
+		text-decoration: none;
+
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.featured-card:hover {
+		transform: translateY(-3px);
+		border-color: rgba(94, 234, 212, 0.35);
+	}
+
+	.post-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	time {
+		color: var(--muted);
+		font-family: Consolas, monospace;
+		font-size: 0.75rem;
+	}
+
+	.featured-card h3 {
+		max-width: 650px;
+		margin: 3rem 0 0.8rem;
+
+		font-size: 2rem;
+		letter-spacing: -0.025em;
+	}
+
+	.description {
+		margin: 0;
+
+		color: var(--muted);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+
+		margin-top: 1.4rem;
+	}
+
+	.tags span {
+		padding: 0.25rem 0.45rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		background: var(--bg-soft);
+		color: #aebdd0;
+
+		font-family: Consolas, monospace;
+		font-size: 0.68rem;
+	}
+
+	.read-link {
+		display: flex;
+		justify-content: space-between;
+
+		margin-top: 2rem;
+		padding-top: 1rem;
+
+		border-top: 1px solid var(--border);
+
+		color: var(--success);
+
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+
+	.post-list {
+		border-top: 1px solid var(--border);
+	}
+
+	.post-row {
+		display: grid;
+		grid-template-columns: 190px 1fr 40px;
+		gap: 2rem;
+
+		padding: 2rem 0;
+
+		border-bottom: 1px solid var(--border);
+
+		color: inherit;
+		text-decoration: none;
+
+		transition: padding 0.2s ease;
+	}
+
+	.post-row:hover {
+		padding-left: 0.6rem;
+	}
+
+	.post-meta {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+
+	.post-content h3 {
+		margin: 0 0 0.55rem;
+
+		font-size: 1.45rem;
+
+		transition: color 0.2s ease;
+	}
+
+	.post-row:hover h3 {
+		color: var(--accent);
+	}
+
+	.post-content > p {
+		max-width: 690px;
+		margin: 0;
+
+		color: var(--muted);
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+
+		color: var(--accent);
+		font-size: 1.4rem;
+	}
+
+	@media (max-width: 760px) {
+		.journal-header {
+			padding: 5rem 0 4rem;
+		}
+
+		.legend,
+		.featured-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.section-heading {
+			display: block;
+		}
+
+		.section-heading > p {
+			margin-top: 0.7rem;
+		}
+
+		.post-row {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+
+		.arrow {
+			display: none;
+		}
+	}
+</style>

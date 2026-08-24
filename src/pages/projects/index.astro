@@ -1,0 +1,691 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const projects = [
+	{
+		number: '01',
+		category: 'Virtualization & Infrastructure',
+		title: 'Multi-Node Proxmox Homelab',
+		description:
+			'A multi-node virtualization environment used to host Linux containers, virtual machines, storage services, monitoring platforms, and self-hosted applications.',
+		tags: [
+			'Proxmox VE',
+			'Linux',
+			'LXC',
+			'Virtualization',
+			'Clustering',
+		],
+		highlights: [
+			'Multi-node Proxmox VE environment',
+			'Virtual machines and Linux containers',
+			'Centralized infrastructure services',
+			'Backup and recovery workflows',
+		],
+		status: 'Active',
+		href: null,
+	},
+	{
+		number: '02',
+		category: 'Networking & Security',
+		title: 'Segmented Homelab Network',
+		description:
+			'A routed and segmented home network designed around OPNsense, VLAN isolation, firewall policies, internal DNS, VPN access, and managed infrastructure.',
+		tags: [
+			'OPNsense',
+			'VLANs',
+			'Firewall',
+			'DNS',
+			'VPN',
+		],
+		highlights: [
+			'VLAN-based network segmentation',
+			'Inter-VLAN firewall policies',
+			'Internal DNS and DHCP services',
+			'Secure remote administration',
+		],
+		status: 'Active',
+		href: null,
+	},
+	{
+		number: '03',
+		category: 'Observability',
+		title: 'Prometheus & Grafana Monitoring',
+		description:
+			'A centralized observability stack for collecting infrastructure metrics and building custom dashboards across the homelab environment.',
+		tags: [
+			'Prometheus',
+			'Grafana',
+			'Node Exporter',
+			'Linux',
+		],
+		highlights: [
+			'Centralized metric collection',
+			'Multi-host Node Exporter monitoring',
+			'Custom PromQL queries',
+			'Grafana visualization and troubleshooting',
+		],
+		status: 'In Progress',
+		href: '/blog/grafana-monitoring-lab-note/',
+	},
+	{
+		number: '04',
+		category: 'Linux & Automation',
+		title: 'Raspberry Pi Rack Dashboard',
+		description:
+			'A dedicated appliance-style kiosk system built from a Raspberry Pi and repurposed display for real-time homelab information.',
+		tags: [
+			'Raspberry Pi',
+			'Debian',
+			'Chromium',
+			'Openbox',
+			'Automation',
+		],
+		highlights: [
+			'Minimal Debian graphical environment',
+			'Automatic kiosk-mode startup',
+			'Dedicated rack interface',
+			'Display and usability optimization',
+		],
+		status: 'Completed',
+		href: '/blog/rack-dashboard-project/',
+	},
+	{
+		number: '05',
+		category: 'Storage & Data',
+		title: 'TrueNAS & ZFS Storage Platform',
+		description:
+			'A virtualized storage environment providing centralized network storage and ZFS-based data protection for homelab services.',
+		tags: [
+			'TrueNAS',
+			'ZFS',
+			'NFS',
+			'Storage',
+			'Proxmox',
+		],
+		highlights: [
+			'ZFS storage architecture',
+			'Network file sharing',
+			'Virtualized NAS deployment',
+			'Storage integration with Proxmox',
+		],
+		status: 'Active',
+		href: null,
+	},
+	{
+		number: '06',
+		category: 'Containers & Self-Hosting',
+		title: 'Self-Hosted Application Platform',
+		description:
+			'A Docker-based environment used to deploy and maintain infrastructure utilities, monitoring platforms, media applications, and personal services.',
+		tags: [
+			'Docker',
+			'Compose',
+			'Nginx',
+			'Linux',
+			'Reverse Proxy',
+		],
+		highlights: [
+			'Docker Compose deployments',
+			'Reverse proxy and TLS',
+			'Internal application hosting',
+			'Service health monitoring',
+		],
+		status: 'Active',
+		href: null,
+	},
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title="Projects | Cole Stephens"
+			description="Selected infrastructure, networking, Linux, virtualization, monitoring, and self-hosting projects from Cole Stephens."
+		/>
+	</head>
+
+	<body>
+		<Header />
+
+		<main>
+			<section class="projects-header">
+				<p class="eyebrow">SELECTED WORK</p>
+
+				<h1>
+					Infrastructure built
+					<span>to learn by doing.</span>
+				</h1>
+
+				<p class="intro">
+					A curated collection of the larger systems and projects I've
+					designed, deployed, maintained, and troubleshot in my homelab.
+				</p>
+
+				<div class="project-stats">
+					<div>
+						<strong>{projects.length}</strong>
+						<span>Featured Projects</span>
+					</div>
+
+					<div>
+						<strong>24/7</strong>
+						<span>Lab Environment</span>
+					</div>
+
+					<div>
+						<strong>Hands-On</strong>
+						<span>Built & Maintained</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="projects-section">
+				<div class="section-heading">
+					<div>
+						<p class="section-label">PROJECT INDEX</p>
+						<h2>Selected Projects</h2>
+					</div>
+
+					<p>
+						Each project represents hands-on work with real
+						infrastructure, troubleshooting, and ongoing maintenance.
+					</p>
+				</div>
+
+				<div class="projects-grid">
+					{
+						projects.map((project) => (
+							<article class="project-card">
+								<div class="project-top">
+									<span class="number">{project.number}</span>
+
+									<span
+										class:list={[
+											'status',
+											project.status === 'Completed'
+												? 'completed'
+												: project.status === 'In Progress'
+													? 'progress'
+													: 'active',
+										]}
+									>
+										<span class="status-dot"></span>
+										{project.status}
+									</span>
+								</div>
+
+								<div class="project-category">
+									{project.category}
+								</div>
+
+								<h3>{project.title}</h3>
+
+								<p class="description">
+									{project.description}
+								</p>
+
+								<div class="tags">
+									{project.tags.map((tag) => (
+										<span>{tag}</span>
+									))}
+								</div>
+
+								<div class="divider"></div>
+
+								<div class="highlights">
+									<p>KEY AREAS</p>
+
+									<ul>
+										{project.highlights.map((highlight) => (
+											<li>{highlight}</li>
+										))}
+									</ul>
+								</div>
+
+								<div class="project-footer">
+									{
+										project.href ? (
+											<a href={project.href}>
+												View documentation
+												<span aria-hidden="true">→</span>
+											</a>
+										) : (
+											<span class="coming-soon">
+												Write-up coming soon
+											</span>
+										)
+									}
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="philosophy">
+				<div>
+					<p class="section-label">WHY A HOMELAB?</p>
+
+					<h2>
+						Production concepts,
+						<br />
+						without the production blast radius.
+					</h2>
+				</div>
+
+				<div class="philosophy-copy">
+					<p>
+						My homelab gives me an environment where I can deploy
+						services, break configurations, troubleshoot failures,
+						rebuild systems, and understand how infrastructure
+						components interact.
+					</p>
+
+					<p>
+						The goal isn't simply to run self-hosted applications.
+						It's to develop practical experience with the systems,
+						tools, and troubleshooting workflows used in IT
+						infrastructure.
+					</p>
+
+					<a href="/blog/">
+						See what I'm currently working on
+						<span aria-hidden="true">→</span>
+					</a>
+				</div>
+			</section>
+		</main>
+
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.projects-header {
+		max-width: 980px;
+		padding: 7rem 0 6rem;
+	}
+
+	.eyebrow,
+	.section-label {
+		margin: 0 0 1rem;
+
+		color: var(--accent);
+
+		font-family: Consolas, monospace;
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+	}
+
+	h1 {
+		max-width: 950px;
+		margin: 0;
+
+		font-size: clamp(3.5rem, 7vw, 6.4rem);
+		line-height: 0.96;
+		letter-spacing: -0.055em;
+	}
+
+	h1 span {
+		display: block;
+		color: #a6b6c9;
+	}
+
+	.intro {
+		max-width: 720px;
+		margin: 2rem 0 0;
+
+		color: var(--muted);
+
+		font-size: 1.15rem;
+		line-height: 1.75;
+	}
+
+	.project-stats {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+
+		max-width: 760px;
+		margin-top: 3.5rem;
+
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		background: var(--bg-elevated);
+	}
+
+	.project-stats div {
+		padding: 1.25rem 1.4rem;
+	}
+
+	.project-stats div + div {
+		border-left: 1px solid var(--border);
+	}
+
+	.project-stats strong,
+	.project-stats span {
+		display: block;
+	}
+
+	.project-stats strong {
+		color: var(--text-strong);
+		font-size: 1.25rem;
+	}
+
+	.project-stats span {
+		margin-top: 0.2rem;
+
+		color: var(--muted);
+
+		font-family: Consolas, monospace;
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	.projects-section {
+		padding: 1rem 0 7rem;
+	}
+
+	.section-heading {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 3rem;
+
+		margin-bottom: 2rem;
+	}
+
+	.section-heading h2,
+	.philosophy h2 {
+		margin: 0;
+
+		font-size: clamp(2rem, 4vw, 3rem);
+		letter-spacing: -0.035em;
+	}
+
+	.section-heading > p {
+		max-width: 440px;
+		margin: 0;
+
+		color: var(--muted);
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.project-card {
+		display: flex;
+		flex-direction: column;
+
+		padding: 1.8rem;
+
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		background:
+			linear-gradient(
+				145deg,
+				rgba(255, 255, 255, 0.025),
+				transparent
+			),
+			var(--bg-elevated);
+
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.project-card:hover {
+		transform: translateY(-3px);
+		border-color: #34455b;
+	}
+
+	.project-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		margin-bottom: 2.4rem;
+	}
+
+	.number {
+		color: var(--accent);
+
+		font-family: Consolas, monospace;
+		font-size: 0.75rem;
+	}
+
+	.status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+
+		padding: 0.25rem 0.5rem;
+
+		border: 1px solid var(--border);
+		border-radius: 999px;
+
+		color: var(--muted);
+
+		font-family: Consolas, monospace;
+		font-size: 0.65rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.status-dot {
+		width: 6px;
+		height: 6px;
+
+		border-radius: 50%;
+
+		background: var(--muted);
+	}
+
+	.status.completed {
+		border-color: rgba(94, 234, 212, 0.25);
+		color: var(--success);
+	}
+
+	.status.completed .status-dot {
+		background: var(--success);
+	}
+
+	.status.active {
+		border-color: rgba(56, 189, 248, 0.25);
+		color: var(--accent);
+	}
+
+	.status.active .status-dot {
+		background: var(--accent);
+	}
+
+	.status.progress {
+		border-color: rgba(250, 204, 21, 0.25);
+		color: #facc15;
+	}
+
+	.status.progress .status-dot {
+		background: #facc15;
+	}
+
+	.project-category {
+		margin-bottom: 0.65rem;
+
+		color: var(--accent);
+
+		font-family: Consolas, monospace;
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	.project-card h3 {
+		margin: 0 0 0.8rem;
+
+		font-size: 1.65rem;
+		letter-spacing: -0.025em;
+	}
+
+	.description {
+		margin: 0;
+
+		color: var(--muted);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+
+		margin-top: 1.4rem;
+	}
+
+	.tags span {
+		padding: 0.25rem 0.45rem;
+
+		border: 1px solid var(--border);
+		border-radius: 5px;
+
+		background: var(--bg-soft);
+		color: #aebdd0;
+
+		font-family: Consolas, monospace;
+		font-size: 0.68rem;
+	}
+
+	.divider {
+		height: 1px;
+		margin: 1.6rem 0;
+
+		background: var(--border);
+	}
+
+	.highlights {
+		flex: 1;
+	}
+
+	.highlights > p {
+		margin: 0 0 0.8rem;
+
+		color: var(--muted);
+
+		font-family: Consolas, monospace;
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	.highlights ul {
+		margin: 0;
+		padding-left: 1.15rem;
+
+		color: #bcc8d6;
+	}
+
+	.highlights li {
+		margin-bottom: 0.4rem;
+	}
+
+	.project-footer {
+		margin-top: 1.8rem;
+		padding-top: 1rem;
+
+		border-top: 1px solid var(--border);
+	}
+
+	.project-footer a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		color: var(--accent);
+
+		font-size: 0.82rem;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.project-footer a:hover {
+		color: var(--accent-hover);
+	}
+
+	.coming-soon {
+		color: #66778b;
+
+		font-family: Consolas, monospace;
+		font-size: 0.72rem;
+	}
+
+	.philosophy {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 5rem;
+
+		padding: 6rem 0;
+
+		border-top: 1px solid var(--border);
+	}
+
+	.philosophy-copy {
+		color: var(--muted);
+
+		font-size: 1.05rem;
+	}
+
+	.philosophy-copy p:first-child {
+		margin-top: 0;
+	}
+
+	.philosophy-copy a {
+		display: inline-flex;
+		gap: 0.7rem;
+
+		margin-top: 1rem;
+
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	@media (max-width: 800px) {
+		.projects-header {
+			padding: 5rem 0;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.section-heading,
+		.philosophy {
+			display: block;
+		}
+
+		.section-heading > p {
+			margin-top: 1rem;
+		}
+
+		.philosophy-copy {
+			margin-top: 2rem;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.project-stats {
+			grid-template-columns: 1fr;
+		}
+
+		.project-stats div + div {
+			border-top: 1px solid var(--border);
+			border-left: 0;
+		}
+	}
+</style>

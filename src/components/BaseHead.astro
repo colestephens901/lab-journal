@@ -82,3 +82,25 @@ const socialImageURL = new URL(image.src, Astro.site);
 	src="https://analytics.coleshomelab.com/script.js"
 	data-website-id="0e7d60a2-1ad7-46a0-b40d-08017ab9d843">
 </script>
+
+<!-- Umami Outbound Link Tracking -->
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelectorAll('a[href]').forEach((link) => {
+			if (
+				link.host !== window.location.host &&
+				!link.getAttribute('data-umami-event')
+			) {
+				link.setAttribute(
+					'data-umami-event',
+					'outbound-link-click'
+				);
+
+				link.setAttribute(
+					'data-umami-event-url',
+					link.href
+				);
+			}
+		});
+	});
+</script>
